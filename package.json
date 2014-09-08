@@ -1,0 +1,38 @@
+{
+  "name": "DOMWalker",
+  "description": "DomWalker",
+  "version": "0.0.1",
+  "homepage": "http://www.l20n.org",
+  "author": "Mozilla <l10n-drivers@mozilla.org>",
+  "licenses": [
+    {
+      "type": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Zbigniew Braniecki",
+      "email": "zbraniecki@mozilla.com"
+    }
+  ],
+  "directories": {
+    "lib": "./lib"
+  },
+  "main": "./bin/domwalker.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/l20n/l20n.js.git"
+  },
+  "keywords": [
+    "localization",
+    "l10n"
+  ],
+  "devDependencies": {
+    "commander": "~2.0",
+    "promise": "~5.0"
+  },
+  "engine": {
+    "node": ">=0.10"
+  }
+}
