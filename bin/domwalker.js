@@ -45,10 +45,9 @@ function scanFile(data, path) {
         for (var i = 0; i < nodes.length; i++) {
           var node = nodes[i];
           if (node.children.length) {
-            console.log('==========================');
-            console.log(path);
+            console.log('========= ' + path + ' =======\n');
             console.log(node.outerHTML);
-            console.log('==========================');
+            console.log('\n\n');
           }
         }
       }
