@@ -30,7 +30,8 @@
   ],
   "devDependencies": {
     "commander": "~2.0",
-    "promise": "~5.0"
+    "walk": "~2.3",
+    "jsdom": "~1.0"
   },
   "engine": {
     "node": ">=0.10"
