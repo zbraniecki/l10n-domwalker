@@ -12,7 +12,7 @@ var options = {
   followLinks: true
 };
 
-var path1 = '/Users/zbraniecki/projects/gaia/apps/wappush';
+var path1 = '/Users/zbraniecki/projects/gaia/apps/';
 
 function walkDOM() {
   var walker = walk.walk(path1, options);
@@ -22,18 +22,22 @@ function walkDOM() {
     if (path.extname(fileStats.name) == '.html') {
       var filePath = path.join(root, fileStats.name);
 
-      fs.readFile(filePath, function (err, data) {
-        if (err) throw err;
+      if (!/\/(test|imes)\//.test(filePath)) {
+        console.log('starting: ' + filePath); 
+        fs.readFile(filePath, function (err, data) {
+          if (err) throw err;
 
-        cleanHTML(data.toString(), function(newHTML, isModified) {
-          if (isModified) {
-            var str = jsdom.serializeDocument(newHTML);
-            fs.writeFile(filePath, str, function (err) {
-              if (err) throw err;
-            });
-          }
+          cleanHTML(data.toString(), function(newHTML, isModified) {
+            if (isModified) {
+              var str = jsdom.serializeDocument(newHTML);
+              fs.writeFile(filePath, str, function (err) {
+                if (err) throw err;
+                console.log('ending: ' + filePath); 
+              });
+            }
+          });
         });
-      });
+      }
     }
     next();
   });
