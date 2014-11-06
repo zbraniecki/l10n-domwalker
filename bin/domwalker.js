@@ -12,7 +12,7 @@ var options = {
   followLinks: true
 };
 
-var path1 = '/Users/zbraniecki/projects/gaia/apps/';
+var path1 = '/Users/zbraniecki/projects/gaia/apps/wappush';
 
 function walkDOM() {
   var walker = walk.walk(path1, options);
@@ -25,7 +25,14 @@ function walkDOM() {
       fs.readFile(filePath, function (err, data) {
         if (err) throw err;
 
-        scanFile(data.toString(), filePath);
+        cleanHTML(data.toString(), function(newHTML, isModified) {
+          if (isModified) {
+            var str = jsdom.serializeDocument(newHTML);
+            fs.writeFile(filePath, str, function (err) {
+              if (err) throw err;
+            });
+          }
+        });
       });
     }
     next();
@@ -35,26 +42,36 @@ function walkDOM() {
   });
 }
 
-function scanFile(data, path) {
+var skipNodes = [
+  'SCRIPT',
+];
+
+function cleanHTML(string, cb) {
   jsdom.env(
-    data,
+    string,
     [],
     function (errors, window) {
-      var nodes = window.document.querySelectorAll('[data-l10n-id]');
+      var isModified = false;
+      var nodes = window.document.body.getElementsByTagName('*');
       if (nodes) {
         for (var i = 0; i < nodes.length; i++) {
           var node = nodes[i];
-          if (node.children.length) {
-            console.log('========= ' + path + ' =======\n');
-            console.log(node.outerHTML);
-            console.log('\n\n');
+          if (skipNodes.indexOf(node.nodeName) !== -1) {
+            continue;
+          }
+          if (!node.children.length) {
+            if (node.textContent.trim('').length === 0) {
+              continue;
+            }
+            isModified = true;
+            node.textContent = '';
           }
         }
       }
+      cb(window.document, isModified);
     }
   );
 }
-
 
 program
   .version('0.0.1')
